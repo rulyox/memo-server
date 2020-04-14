@@ -1,35 +1,12 @@
 from flask import Flask, request, jsonify
+from data import Memo
 
 
-class Memo:
-    __title = ''
-    __text = ''
-
-    def __init__(self, title, text):
-        self.__title = title
-        self.__text = text
-
-    def get_memo(self):
-        return {
-            'title': self.__title,
-            'text': self.__text
-        }
-
-
+# instead of a database
 memo_list = []
 
+# server object
 app = Flask(__name__)
-
-
-@app.route('/memo', methods=['GET'])
-def show_memo():
-    response = []
-
-    # iterate through memo objects
-    for memo in memo_list:
-        response.append(memo.get_memo())
-
-    return jsonify(response)
 
 
 @app.route('/memo', methods=['POST'])
@@ -50,6 +27,17 @@ def add_memo():
     memo_list.append(memo)
 
     response['result'] = True
+    return jsonify(response)
+
+
+@app.route('/memo', methods=['GET'])
+def show_memo():
+    response = []
+
+    # iterate through memo objects
+    for memo in memo_list:
+        response.append(memo.get_memo())
+
     return jsonify(response)
 
 
